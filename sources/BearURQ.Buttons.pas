@@ -2,7 +2,8 @@ unit BearURQ.Buttons;
 
 interface
 
-uses Classes;
+uses
+  Classes;
 
 type
   TButtons = class
