@@ -16,7 +16,8 @@ uses
   BearURQ.Location in 'sources\BearURQ.Location.pas',
   BearURQ.Vars in 'sources\BearURQ.Vars.pas',
   BearURQ.Engine in 'sources\BearURQ.Engine.pas',
-  BearURQ.Utils in 'sources\BearURQ.Utils.pas';
+  BearURQ.Utils in 'sources\BearURQ.Utils.pas',
+  BearURQ.Math in 'sources\BearURQ.Math.pas';
 
 begin
 {$IFNDEF FPC}

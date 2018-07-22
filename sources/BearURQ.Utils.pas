@@ -5,17 +5,47 @@ interface
 type
   TSplitResult = array of string;
 
-type
-  TKeyAndValue = record
-    Key, Value: string;
-  end;
-
+function Explode(const cSeparator, vString: string): TSplitResult;
+function Implode(const cSeparator: string; const cArray: TSplitResult): string;
 function StrLeft(S: string; I: Integer): string;
 function StrRight(S: string; I: Integer): string;
 function GetINIKey(S, Key: string): string;
 function GetINIValue(S, Key: string; Default: string = ''): string;
 
 implementation
+
+// Разбить строку в массив TSplitResult, аналог Split
+function Explode(const cSeparator, vString: string): TSplitResult;
+var
+  I: Integer;
+  S: String;
+begin
+  S := vString;
+  SetLength(Result, 0);
+  I := 0;
+  while Pos(cSeparator, S) > 0 do
+  begin
+    SetLength(Result, Length(Result) + 1);
+    Result[I] := Copy(S, 1, Pos(cSeparator, S) - 1);
+    Inc(I);
+    S := Copy(S, Pos(cSeparator, S) + Length(cSeparator), Length(S));
+  end;
+  SetLength(Result, Length(Result) + 1);
+  Result[I] := Copy(S, 1, Length(S));
+end;
+
+// Соединить массив TSplitResult в одну строку, аналог Join
+function Implode(const cSeparator: string; const cArray: TSplitResult): string;
+var
+  I: Integer;
+begin
+  Result := '';
+  for I := 0 to Length(cArray) - 1 do
+  begin
+    Result := Result + cSeparator + cArray[I];
+  end;
+  System.Delete(Result, 1, Length(cSeparator));
+end;
 
 // Копия строки слева
 function StrLeft(S: string; I: Integer): string;
