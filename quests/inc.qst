@@ -1,0 +1,4 @@
+:loc3
+  pln Test 3
+  btn loc1, 1
+end

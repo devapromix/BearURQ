@@ -118,7 +118,7 @@ begin
         for B := 0 to I - 1 do
           SL[1].Append(FQuestList[B]);
         F := Trim(Copy(FQuestList[I], 8, Length(FQuestList[I])));
-        SL[2].Text := LoadFromFile(F, '');
+        SL[2].Text := LoadFromFile(ExtractFilePath(FQuestFileName) + F, '');
         for C := I + 1 to FQuestList.Count - 1 do
           SL[3].Append(FQuestList[C]);
         FQuestList.Text := SL[1].Text + SL[2].Text + SL[3].Text;
@@ -189,7 +189,9 @@ begin
       end;
       //
     end;
-    Result := FL.Text;
+    Result := Trim(FL.Text);
+    if Result = '' then
+      Result := DefCode;
   finally
     FL.Free;
   end;
