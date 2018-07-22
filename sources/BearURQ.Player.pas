@@ -6,6 +6,7 @@ uses
   BearURQ.Scenes,
   BearURQ.Buttons,
   BearURQ.Location,
+  BearURQ.Vars,
   BearURQ.Terminal;
 
 type
@@ -21,6 +22,7 @@ type
     FIsDebug: Boolean;
     FButtons: TButtons;
     FLocation: TLocation;
+    FVars: TVars;
     procedure UpdateTitle;
     procedure DoMainLoop;
   public
@@ -30,6 +32,7 @@ type
     property Scenes: TScenes read FScenes;
     property Buttons: TButtons read FButtons;
     property Location: TLocation read FLocation;
+    property Vars: TVars read FVars;
     property Version: string read FVersion;
     property FileName: string read FFileName write FFileName;
     property IsDebug: Boolean read FIsDebug;
@@ -89,9 +92,11 @@ begin
   FTerminal := TTerminal.Create;
   FButtons := TButtons.Create;
   FLocation := TLocation.Create;
+  FVars := TVars.Create;
 
   FEntScene.Buttons := FButtons;
   FEntScene.Location := FLocation;
+  FEntScene.Vars := FVars;
   FScenes := TScenes.Create(FTerminal, FEntScene);
 
   ChParams;
@@ -107,6 +112,7 @@ destructor TPlayer.Destroy;
 begin
   FreeAndNil(FButtons);
   FreeAndNil(FLocation);
+  FreeAndNil(FVars);
   FreeAndNil(FScenes);
   FreeAndNil(FTerminal);
   inherited;
@@ -133,14 +139,15 @@ end;
 
 procedure TPlayer.Render;
 begin
-  FTerminal.Clear;
+  Terminal.Clear;
   Scenes.Render;
-  FTerminal.Refresh;
+  Terminal.Refresh;
 end;
 
 procedure TPlayer.RunQuest(const FileName: string);
 begin
   // Очищаем все переменные, весь инвентарь, все кнопки и т.д.
+  FVars.Clear;
   FLocation.Clear;
   FButtons.Clear;
   // Добавляем системные переменные
