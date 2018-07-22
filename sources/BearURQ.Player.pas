@@ -146,10 +146,10 @@ begin
   // Добавляем системные переменные
 
   // Открываем квест
-  FLocation.Append('Первая строка!'+#13#10+'Вторая строка!');
-  FButtons.Append('1', 'But 1');
-  FButtons.Append('2', 'But 2');
-  FButtons.Append('3', 'But 3');
+//  FLocation.Append('Первая строка!'+#13#10+'Вторая строка!');
+//  FButtons.Append('1', 'But 1');
+//  FButtons.Append('2', 'But 2');
+//  FButtons.Append('3', 'But 3');
 end;
 
 procedure TPlayer.UpdateTitle;

@@ -33,7 +33,7 @@ end;
 
 constructor TLocation.Create;
 begin
-
+  Clear;
 end;
 
 destructor TLocation.Destroy;

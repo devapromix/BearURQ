@@ -5,6 +5,7 @@ interface
 uses
   BearURQ.Terminal,
   BearURQ.Location,
+  BearURQ.Vars,
   BearURQ.Buttons;
 
 type
@@ -14,6 +15,7 @@ type
   TEntScene = record
     Location: TLocation;
     Buttons: TButtons;
+    Vars: TVars;
   end;
 
 type
@@ -22,6 +24,7 @@ type
     FTerminal: TTerminal;
     FButtons: TButtons;
     FLocation: TLocation;
+    FVars: TVars;
     procedure Print(const X, Y: Word; const S: string); overload;
     procedure Print(const Y: Word; const S: string); overload;
   public
@@ -89,6 +92,7 @@ begin
   FTerminal := ATerminal;
   FButtons := AEntScene.Buttons;
   FLocation := AEntScene.Location;
+  FVars := AEntScene.Vars;
 end;
 
 procedure TScene.Print(const Y: Word; const S: string);
