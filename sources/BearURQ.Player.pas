@@ -132,11 +132,7 @@ begin
   // Открываем квест
   Engine.LoadFromFile(FileName);
   Self.UpdateTitle;
-  // Тест
-  Engine.Location.Append('Первая строка!' + #13#10 + 'Вторая строка!');
-  Engine.Buttons.Append('1', 'But 1');
-  Engine.Buttons.Append('2', 'But 2');
-  Engine.Buttons.Append('3', 'But 3');
+
   // Сцена игры
   Scenes.SetScene(scGame);
 end;
