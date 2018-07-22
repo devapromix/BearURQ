@@ -5,6 +5,7 @@ interface
 uses
   BearURQ.Scenes,
   BearURQ.Buttons,
+  BearURQ.Location,
   BearURQ.Terminal;
 
 type
@@ -19,17 +20,20 @@ type
     FVersion: string;
     FIsDebug: Boolean;
     FButtons: TButtons;
+    FLocation: TLocation;
     procedure UpdateTitle;
+    procedure DoMainLoop;
   public
     constructor Create;
     destructor Destroy; override;
     property Terminal: TTerminal read FTerminal;
     property Scenes: TScenes read FScenes;
     property Buttons: TButtons read FButtons;
-    procedure DoMainLoop;
+    property Location: TLocation read FLocation;
     property Version: string read FVersion;
     property FileName: string read FFileName write FFileName;
     property IsDebug: Boolean read FIsDebug;
+    procedure RunQuest(const FileName: string);
     procedure Render;
   end;
 
@@ -46,25 +50,52 @@ var
   { TPlayer }
 
 constructor TPlayer.Create;
+var
+  FEntScene: TEntScene;
+
+  procedure ChParams;
+  var
+    I, N: Integer;
+  begin
+    FileName := '';
+    if ParamCount > 0 then
+    begin
+      N := 1;
+      // Debug mode -d
+      if (Trim(ParamStr(1)) = '-d') then
+      begin
+        N := 2;
+        FIsDebug := True;
+        // Box('-d');
+      end;
+      if ParamCount > 0 then
+      begin
+        for I := N to ParamCount do
+          FileName := Trim(FileName + ' ' + ParamStr(I));
+        RunQuest(Trim(FileName));
+        Exit;
+      end;
+    end;
+
+  end;
+
 begin
+  Randomize();
   // Debug mode -d
   FIsDebug := (ParamCount > 0) and (Trim(ParamStr(1)) = '-d');
   //
   FVersion := 'v.0.1';
-  FileName := 'Test.qst';
-  Randomize();
+
   FTerminal := TTerminal.Create;
   FButtons := TButtons.Create;
-  FScenes := TScenes.Create(FTerminal, FButtons);
+  FLocation := TLocation.Create;
+
+  FEntScene.Buttons := FButtons;
+  FEntScene.Location := FLocation;
+  FScenes := TScenes.Create(FTerminal, FEntScene);
+
+  ChParams;
   UpdateTitle;
-
-
-  //
-  FButtons.Append('1', 'But 1');
-  FButtons.Append('2', 'But 2');
-  FButtons.Append('3', 'But 3');
-
-
 
   FKey := 0;
   FIsRender := True;
@@ -75,6 +106,7 @@ end;
 destructor TPlayer.Destroy;
 begin
   FreeAndNil(FButtons);
+  FreeAndNil(FLocation);
   FreeAndNil(FScenes);
   FreeAndNil(FTerminal);
   inherited;
@@ -104,6 +136,20 @@ begin
   FTerminal.Clear;
   Scenes.Render;
   FTerminal.Refresh;
+end;
+
+procedure TPlayer.RunQuest(const FileName: string);
+begin
+  // Очищаем все переменные, весь инвентарь, все кнопки и т.д.
+  FLocation.Clear;
+  FButtons.Clear;
+  // Добавляем системные переменные
+
+  // Открываем квест
+  FLocation.Append('Первая строка!'+#13#10+'Вторая строка!');
+  FButtons.Append('1', 'But 1');
+  FButtons.Append('2', 'But 2');
+  FButtons.Append('3', 'But 3');
 end;
 
 procedure TPlayer.UpdateTitle;

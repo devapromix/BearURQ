@@ -12,7 +12,8 @@ uses
   BearURQ.Terminal in 'sources\BearURQ.Terminal.pas',
   BearURQ.Buttons in 'sources\BearURQ.Buttons.pas',
   BearURQ.Scenes in 'sources\BearURQ.Scenes.pas',
-  BearURQ.Player in 'sources\BearURQ.Player.pas';
+  BearURQ.Player in 'sources\BearURQ.Player.pas',
+  BearURQ.Location in 'sources\BearURQ.Location.pas';
 
 begin
 {$IFNDEF FPC}

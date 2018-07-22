@@ -4,20 +4,28 @@ interface
 
 uses
   BearURQ.Terminal,
+  BearURQ.Location,
   BearURQ.Buttons;
 
 type
   TSceneEnum = (scTitle, scGame);
 
 type
+  TEntScene = record
+    Location: TLocation;
+    Buttons: TButtons;
+  end;
+
+type
   TScene = class(TObject)
   private
     FTerminal: TTerminal;
     FButtons: TButtons;
+    FLocation: TLocation;
     procedure Print(const X, Y: Word; const S: string); overload;
     procedure Print(const Y: Word; const S: string); overload;
   public
-    constructor Create(ATerminal: TTerminal; AButtons: TButtons);
+    constructor Create(ATerminal: TTerminal; AEntScene: TEntScene);
     property Terminal: TTerminal read FTerminal;
     procedure Render; virtual; abstract;
     procedure Update(var Key: Word); virtual; abstract;
@@ -30,7 +38,7 @@ type
     FScene: array [TSceneEnum] of TScene;
     FPrevSceneEnum: TSceneEnum;
   public
-    constructor Create(ATerminal: TTerminal; AButtons: TButtons);
+    constructor Create(ATerminal: TTerminal;AEntScene: TEntScene);
     destructor Destroy; override;
     procedure Render; override;
     procedure Update(var Key: Word); override;
@@ -46,7 +54,7 @@ type
 type
   TSceneTitle = class(TScene)
   public
-    constructor Create(ATerminal: TTerminal; AButtons: TButtons);
+    constructor Create(ATerminal: TTerminal; AEntScene: TEntScene);
     procedure Render; override;
     procedure Update(var Key: Word); override;
   end;
@@ -54,7 +62,7 @@ type
 type
   TSceneGame = class(TScene)
   public
-    constructor Create(ATerminal: TTerminal; AButtons: TButtons);
+    constructor Create(ATerminal: TTerminal;AEntScene: TEntScene);
     procedure Render; override;
     procedure Update(var Key: Word); override;
   end;
@@ -76,10 +84,11 @@ begin
   terminal_print(X, Y, S);
 end;
 
-constructor TScene.Create(ATerminal: TTerminal; AButtons: TButtons);
+constructor TScene.Create(ATerminal: TTerminal; AEntScene: TEntScene);
 begin
   FTerminal := ATerminal;
-  FButtons := AButtons;
+  FButtons := AEntScene.Buttons;
+  FLocation := AEntScene.Location;
 end;
 
 procedure TScene.Print(const Y: Word; const S: string);
@@ -89,17 +98,17 @@ end;
 
 { TScenes }
 
-constructor TScenes.Create(ATerminal: TTerminal; AButtons: TButtons);
+constructor TScenes.Create(ATerminal: TTerminal; AEntScene: TEntScene);
 var
   I: TSceneEnum;
 begin
-  inherited Create(ATerminal, AButtons);
+  inherited Create(ATerminal, AEntScene);
   for I := Low(TSceneEnum) to High(TSceneEnum) do
     case I of
       scTitle:
-        FScene[I] := TSceneTitle.Create(ATerminal, AButtons);
+        FScene[I] := TSceneTitle.Create(ATerminal, AEntScene);
       scGame:
-        FScene[I] := TSceneGame.Create(ATerminal, AButtons);
+        FScene[I] := TSceneGame.Create(ATerminal, AEntScene);
     end;
   SceneEnum := scGame;
 end;
@@ -151,9 +160,9 @@ end;
 
 { TSceneTitle }
 
-constructor TSceneTitle.Create(ATerminal: TTerminal; AButtons: TButtons);
+constructor TSceneTitle.Create(ATerminal: TTerminal; AEntScene: TEntScene);
 begin
-  inherited Create(ATerminal, AButtons);
+  inherited Create(ATerminal, AEntScene);
 end;
 
 procedure TSceneTitle.Render;
@@ -168,23 +177,24 @@ end;
 
 { TSceneGame }
 
-constructor TSceneGame.Create(ATerminal: TTerminal; AButtons: TButtons);
+constructor TSceneGame.Create(ATerminal: TTerminal;AEntScene: TEntScene);
 begin
-  inherited Create(ATerminal, AButtons);
+  inherited Create(ATerminal, AEntScene);
 end;
 
 procedure TSceneGame.Render;
 var
   I: Integer;
 begin
-  // Текст локации
-  Print(0, 0, 'Text');
-  // Инвентарь
-  // Кнопки
+  // Показываем содержимое окна локации
+  Print(0, FLocation.Title);
+  Print(0, 2, FLocation.Content);
+  // Показываем инвентарь
+  // Показываем все кнопки на локации
   for I := 0 to FButtons.Count - 1 do
   begin
-    Print(0, Terminal.Height - (FButtons.Count - I),
-      IntToStr(I + 1) + '. ' + FButtons.GetName(I));
+    Print(0, Terminal.Height - (FButtons.Count - I), IntToStr(I + 1) + '. ' +
+      FButtons.GetName(I));
   end;
 end;
 
