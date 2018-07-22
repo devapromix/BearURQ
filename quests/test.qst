@@ -1,0 +1,14 @@
+include inc.qst
+
+:loc1
+  pln Test 1
+  btn loc2, 2
+  btn loc3, 3
+end
+
+:loc2
+  pln Test 2
+  btn loc1, Назад
+end
+
+

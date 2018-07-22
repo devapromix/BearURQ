@@ -130,6 +130,9 @@ begin
   // Добавляем системные переменные
 
   // Открываем квест
+  Engine.LoadFromFile(FileName);
+  Self.UpdateTitle;
+  // Тест
   Engine.Location.Append('Первая строка!' + #13#10 + 'Вторая строка!');
   Engine.Buttons.Append('1', 'But 1');
   Engine.Buttons.Append('2', 'But 2');

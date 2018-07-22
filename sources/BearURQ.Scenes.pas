@@ -178,6 +178,7 @@ procedure TSceneGame.Jump(const Index: Integer);
 var
   CurrButText, CurrLoc: string;
 begin
+  if (Index > Engine.Buttons.Count - 1) then Exit;
   // Ссылка на текущую локацию
   CurrLoc := Trim(Engine.Buttons.GetLabel(Index));
   // Сохраняем в переменной текст последней нажатой кнопки
@@ -185,7 +186,10 @@ begin
   Engine.Vars.SetVarValue('last_btn_caption', CurrButText);
   // Переход на локацию
   Engine.Clear;
-
+  Engine.FIsGoTo := False;
+  Engine.FExitFlag := False;
+  Engine.FLocBtnCnt := 0;
+  Engine.GoToLocation(CurrLoc);
   // Сохраняем в переменных имена текущей и последней локаций
   if (Trim(Engine.Vars.GetVarValue('previous_loc', '')) = '') then
     Engine.Vars.SetVarValue('previous_loc', CurrLoc)

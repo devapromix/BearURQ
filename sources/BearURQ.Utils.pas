@@ -5,33 +5,68 @@ interface
 type
   TSplitResult = array of string;
 
+function AdvLowerCase(const s: string): string;
+function StrReplace(const s, Srch, Replace: string): string;
 function Explode(const cSeparator, vString: string): TSplitResult;
 function Implode(const cSeparator: string; const cArray: TSplitResult): string;
-function StrLeft(S: string; I: Integer): string;
-function StrRight(S: string; I: Integer): string;
-function GetINIKey(S, Key: string): string;
-function GetINIValue(S, Key: string; Default: string = ''): string;
+function StrLeft(s: string; I: Integer): string;
+function StrRight(s: string; I: Integer): string;
+function GetINIKey(s, Key: string): string;
+function GetINIValue(s, Key: string; Default: string = ''): string;
 
 implementation
+
+// В нижний регистр
+function AdvLowerCase(const s: string): string;
+var
+  I: Integer;
+begin
+  result := s;
+  for I := 1 to length(result) do
+    if (result[I] in ['A' .. 'Z', 'А' .. 'Я']) then
+      result[I] := chr(ord(result[I]) + 32)
+    else if (result[I] in ['І']) then
+      result[I] := 'і';
+end;
+
+// Замена в строке
+function StrReplace(const s, Srch, Replace: string): string;
+var
+  I: Integer;
+  Source: string;
+begin
+  Source := s;
+  result := '';
+  repeat
+    I := Pos(AdvLowerCase(Srch), AdvLowerCase(Source));
+    if I > 0 then
+    begin
+      result := result + Copy(Source, 1, I - 1) + Replace;
+      Source := Copy(Source, I + length(Srch), MaxInt);
+    end
+    else
+      result := result + Source;
+  until I <= 0;
+end;
 
 // Разбить строку в массив TSplitResult, аналог Split
 function Explode(const cSeparator, vString: string): TSplitResult;
 var
   I: Integer;
-  S: String;
+  s: String;
 begin
-  S := vString;
-  SetLength(Result, 0);
+  s := vString;
+  SetLength(result, 0);
   I := 0;
-  while Pos(cSeparator, S) > 0 do
+  while Pos(cSeparator, s) > 0 do
   begin
-    SetLength(Result, Length(Result) + 1);
-    Result[I] := Copy(S, 1, Pos(cSeparator, S) - 1);
+    SetLength(result, length(result) + 1);
+    result[I] := Copy(s, 1, Pos(cSeparator, s) - 1);
     Inc(I);
-    S := Copy(S, Pos(cSeparator, S) + Length(cSeparator), Length(S));
+    s := Copy(s, Pos(cSeparator, s) + length(cSeparator), length(s));
   end;
-  SetLength(Result, Length(Result) + 1);
-  Result[I] := Copy(S, 1, Length(S));
+  SetLength(result, length(result) + 1);
+  result[I] := Copy(s, 1, length(s));
 end;
 
 // Соединить массив TSplitResult в одну строку, аналог Join
@@ -39,57 +74,57 @@ function Implode(const cSeparator: string; const cArray: TSplitResult): string;
 var
   I: Integer;
 begin
-  Result := '';
-  for I := 0 to Length(cArray) - 1 do
+  result := '';
+  for I := 0 to length(cArray) - 1 do
   begin
-    Result := Result + cSeparator + cArray[I];
+    result := result + cSeparator + cArray[I];
   end;
-  System.Delete(Result, 1, Length(cSeparator));
+  System.Delete(result, 1, length(cSeparator));
 end;
 
 // Копия строки слева
-function StrLeft(S: string; I: Integer): string;
+function StrLeft(s: string; I: Integer): string;
 begin
-  Result := Copy(S, 1, I);
+  result := Copy(s, 1, I);
 end;
 
 // Копия строки справа
-function StrRight(S: string; I: Integer): string;
+function StrRight(s: string; I: Integer): string;
 var
   L: Integer;
 begin
-  L := Length(S);
-  Result := Copy(S, L - I + 1, L);
+  L := length(s);
+  result := Copy(s, L - I + 1, L);
 end;
 
 // Ключ
-function GetINIKey(S, Key: string): string;
+function GetINIKey(s, Key: string): string;
 var
   P: Integer;
 begin
-  P := Pos(Key, S);
+  P := Pos(Key, s);
   if (P <= 0) then
   begin
-    Result := S;
+    result := s;
     Exit;
   end;
-  Result := StrLeft(S, P - 1);
+  result := StrLeft(s, P - 1);
 end;
 
 // Значение ключа
-function GetINIValue(S, Key: string; Default: string = ''): string;
+function GetINIValue(s, Key: string; Default: string = ''): string;
 var
   L, P, K: Integer;
 begin
-  P := Pos(Key, S);
+  P := Pos(Key, s);
   if (P <= 0) then
   begin
-    Result := Default;
+    result := Default;
     Exit;
   end;
-  L := Length(S);
-  K := Length(Key);
-  Result := StrRight(S, L - P - K + 1);
+  L := length(s);
+  K := length(Key);
+  result := StrRight(s, L - P - K + 1);
 end;
 
 end.

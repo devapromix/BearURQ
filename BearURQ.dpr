@@ -17,7 +17,8 @@ uses
   BearURQ.Vars in 'sources\BearURQ.Vars.pas',
   BearURQ.Engine in 'sources\BearURQ.Engine.pas',
   BearURQ.Utils in 'sources\BearURQ.Utils.pas',
-  BearURQ.Math in 'sources\BearURQ.Math.pas';
+  BearURQ.Math in 'sources\BearURQ.Math.pas',
+  BearURQ.Quest in 'sources\BearURQ.Quest.pas';
 
 begin
 {$IFNDEF FPC}
