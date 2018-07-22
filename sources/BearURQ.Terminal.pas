@@ -1,4 +1,4 @@
-unit BearURQ.Terminal;
+﻿unit BearURQ.Terminal;
 
 interface
 

@@ -1,4 +1,4 @@
-unit BearURQ.Player;
+п»їunit BearURQ.Player;
 
 interface
 
@@ -125,15 +125,17 @@ end;
 
 procedure TPlayer.RunQuest(const FileName: string);
 begin
-  // Очищаем все переменные, весь инвентарь, все кнопки и т.д.
+  // РћС‡РёС‰Р°РµРј РІСЃРµ РїРµСЂРµРјРµРЅРЅС‹Рµ, РІРµСЃСЊ РёРЅРІРµРЅС‚Р°СЂСЊ, РІСЃРµ РєРЅРѕРїРєРё Рё С‚.Рґ.
   Engine.Clear;
-  // Добавляем системные переменные
+  // Р”РѕР±Р°РІР»СЏРµРј СЃРёСЃС‚РµРјРЅС‹Рµ РїРµСЂРµРјРµРЅРЅС‹Рµ
 
-  // Открываем квест
-  Engine.Location.Append('Первая строка!' + #13#10 + 'Вторая строка!');
+  // РћС‚РєСЂС‹РІР°РµРј РєРІРµСЃС‚
+  Engine.Location.Append('РџРµСЂРІР°СЏ СЃС‚СЂРѕРєР°!' + #13#10 + 'Р’С‚РѕСЂР°СЏ СЃС‚СЂРѕРєР°!');
   Engine.Buttons.Append('1', 'But 1');
   Engine.Buttons.Append('2', 'But 2');
   Engine.Buttons.Append('3', 'But 3');
+  // РЎС†РµРЅР° РёРіСЂС‹
+  Scenes.SetScene(scGame);
 end;
 
 procedure TPlayer.UpdateTitle;

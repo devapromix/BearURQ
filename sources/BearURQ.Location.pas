@@ -1,4 +1,4 @@
-unit BearURQ.Location;
+﻿unit BearURQ.Location;
 
 interface
 

@@ -1,4 +1,4 @@
-unit BearURQ.Engine;
+﻿unit BearURQ.Engine;
 
 interface
 

@@ -1,4 +1,4 @@
-unit BearURQ.Buttons;
+﻿unit BearURQ.Buttons;
 
 interface
 

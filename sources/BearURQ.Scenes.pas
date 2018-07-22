@@ -1,4 +1,4 @@
-unit BearURQ.Scenes;
+п»їunit BearURQ.Scenes;
 
 interface
 
@@ -75,6 +75,7 @@ begin
   FEngine := AEngine;
 end;
 
+// РџРµС‡Р°С‚СЊ С‚РµРєСЃС‚Р° РЅР° СЌРєСЂР°РЅРµ С‚РµСЂРјРёРЅР°Р»Р°
 procedure TScene.Print(const X, Y: Word; const S: string);
 begin
   terminal_print(X, Y, S);
@@ -99,7 +100,8 @@ begin
       scGame:
         FScene[I] := TSceneGame.Create(AEngine);
     end;
-  SceneEnum := scGame;
+  // Р­РєСЂР°РЅ РїСЂРёРІРµС‚СЃС‚РІРёСЏ
+  SceneEnum := scTitle;
 end;
 
 destructor TScenes.Destroy;
@@ -156,7 +158,7 @@ end;
 
 procedure TSceneTitle.Render;
 begin
-  Self.Print(10, 'Добро пожаловать в BearURQ!');
+  Self.Print(10, 'Р”РѕР±СЂРѕ РїРѕР¶Р°Р»РѕРІР°С‚СЊ РІ BearURQ!');
 end;
 
 procedure TSceneTitle.Update(var Key: Word);
@@ -171,20 +173,20 @@ begin
   inherited Create(AEngine);
 end;
 
-// Переход по кнопке
+// РџРµСЂРµС…РѕРґ РїРѕ РєРЅРѕРїРєРµ
 procedure TSceneGame.Jump(const Index: Integer);
 var
   CurrButText, CurrLoc: string;
 begin
-  // Ссылка на текущую локацию
+  // РЎСЃС‹Р»РєР° РЅР° С‚РµРєСѓС‰СѓСЋ Р»РѕРєР°С†РёСЋ
   CurrLoc := Trim(Engine.Buttons.GetLabel(Index));
-  // Сохраняем в переменной текст последней нажатой кнопки
+  // РЎРѕС…СЂР°РЅСЏРµРј РІ РїРµСЂРµРјРµРЅРЅРѕР№ С‚РµРєСЃС‚ РїРѕСЃР»РµРґРЅРµР№ РЅР°Р¶Р°С‚РѕР№ РєРЅРѕРїРєРё
   CurrButText := Trim(Engine.Buttons.GetName(Index));
   Engine.Vars.SetVarValue('last_btn_caption', CurrButText);
-  // Переход на локацию
+  // РџРµСЂРµС…РѕРґ РЅР° Р»РѕРєР°С†РёСЋ
   Engine.Clear;
 
-  // Сохраняем в переменных имена текущей и последней локаций
+  // РЎРѕС…СЂР°РЅСЏРµРј РІ РїРµСЂРµРјРµРЅРЅС‹С… РёРјРµРЅР° С‚РµРєСѓС‰РµР№ Рё РїРѕСЃР»РµРґРЅРµР№ Р»РѕРєР°С†РёР№
   if (Trim(Engine.Vars.GetVarValue('previous_loc', '')) = '') then
     Engine.Vars.SetVarValue('previous_loc', CurrLoc)
   else
@@ -200,17 +202,17 @@ var
   I, T: Integer;
 begin
   T := 0;
-  // Текст последней нажатой кнопки
+  // РўРµРєСЃС‚ РїРѕСЃР»РµРґРЅРµР№ РЅР°Р¶Р°С‚РѕР№ РєРЅРѕРїРєРё
   if (Engine.Location.Title <> '') then
   begin
     T := 2;
     Print(0, Engine.Location.Title);
   end;
-  // Показываем содержимое окна локации
+  // РџРѕРєР°Р·С‹РІР°РµРј СЃРѕРґРµСЂР¶РёРјРѕРµ РѕРєРЅР° Р»РѕРєР°С†РёРё
   Print(0, T, Engine.Location.Content);
-  // Показываем инвентарь
+  // РџРѕРєР°Р·С‹РІР°РµРј РёРЅРІРµРЅС‚Р°СЂСЊ
 
-  // Показываем все кнопки на локации
+  // РџРѕРєР°Р·С‹РІР°РµРј РІСЃРµ РєРЅРѕРїРєРё РЅР° Р»РѕРєР°С†РёРё
   for I := 0 to Engine.Buttons.Count - 1 do
   begin
     Print(0, Engine.Terminal.Height - (Engine.Buttons.Count - I),

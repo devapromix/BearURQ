@@ -1,4 +1,4 @@
-unit BearURQ.Vars;
+﻿unit BearURQ.Vars;
 
 interface
 
