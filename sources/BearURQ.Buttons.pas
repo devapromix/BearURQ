@@ -22,6 +22,9 @@ type
 
 implementation
 
+uses
+  SysUtils;
+
 { TButtons }
 
 procedure TButtons.Append(const ALabel, AName: string);
@@ -50,8 +53,8 @@ end;
 
 destructor TButtons.Destroy;
 begin
-  FLabelList.Free;
-  FNameList.Free;
+  FreeAndNil(FLabelList);
+  FreeAndNil(FNameList);
   inherited;
 end;
 

@@ -14,7 +14,6 @@ type
     property Content: string read FContent write FContent;
     procedure Append(const S: string);
     procedure Clear;
-    procedure Render;
   end;
 
 implementation
@@ -41,11 +40,6 @@ destructor TLocation.Destroy;
 begin
 
   inherited;
-end;
-
-procedure TLocation.Render;
-begin
-
 end;
 
 end.

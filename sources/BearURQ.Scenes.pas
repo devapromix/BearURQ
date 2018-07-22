@@ -55,6 +55,7 @@ type
     constructor Create(AEngine: TEngine);
     procedure Render; override;
     procedure Update(var Key: Word); override;
+    procedure Jump(const Index: Integer);
   end;
 
 var
@@ -69,14 +70,14 @@ uses
 
 { TScene }
 
-procedure TScene.Print(const X, Y: Word; const S: string);
-begin
-  terminal_print(X, Y, S);
-end;
-
 constructor TScene.Create(AEngine: TEngine);
 begin
   FEngine := AEngine;
+end;
+
+procedure TScene.Print(const X, Y: Word; const S: string);
+begin
+  terminal_print(X, Y, S);
 end;
 
 procedure TScene.Print(const Y: Word; const S: string);
@@ -170,27 +171,64 @@ begin
   inherited Create(AEngine);
 end;
 
+// Переход по кнопке
+procedure TSceneGame.Jump(const Index: Integer);
+var
+  CurrButText, CurrLoc: string;
+begin
+  // Ссылка на текущую локацию
+  CurrLoc := Trim(Engine.Buttons.GetLabel(Index));
+  // Сохраняем в переменной текст последней нажатой кнопки
+  CurrButText := Trim(Engine.Buttons.GetName(Index));
+  Engine.Vars.SetVarValue('last_btn_caption', CurrButText);
+  // Переход на локацию
+  Engine.Clear;
+
+  // Сохраняем в переменных имена текущей и последней локаций
+  if (Trim(Engine.Vars.GetVarValue('previous_loc', '')) = '') then
+    Engine.Vars.SetVarValue('previous_loc', CurrLoc)
+  else
+    Engine.Vars.SetVarValue('previous_loc',
+      Engine.Vars.GetVarValue('current_loc', ''));
+  Engine.Vars.SetVarValue('current_loc', CurrLoc);
+  Engine.Location.Title := CurrButText;
+  Self.Render;
+end;
+
 procedure TSceneGame.Render;
 var
-  I: Integer;
+  I, T: Integer;
 begin
-  //
-  Print(0, Engine.Location.Title);
+  T := 0;
+  // Текст последней нажатой кнопки
+  if (Engine.Location.Title <> '') then
+  begin
+    T := 2;
+    Print(0, Engine.Location.Title);
+  end;
   // Показываем содержимое окна локации
-  Print(0, 2, Engine.Location.Content);
+  Print(0, T, Engine.Location.Content);
   // Показываем инвентарь
 
   // Показываем все кнопки на локации
   for I := 0 to Engine.Buttons.Count - 1 do
   begin
-    Print(0, Engine.Terminal.Height - (Engine.Buttons.Count - I), IntToStr(I + 1) + '. ' +
-      Engine.Buttons.GetName(I));
+    Print(0, Engine.Terminal.Height - (Engine.Buttons.Count - I),
+      IntToStr(I + 1) + '. ' + Engine.Buttons.GetName(I));
   end;
 end;
 
 procedure TSceneGame.Update(var Key: Word);
+var
+  Index: Integer;
 begin
-
+  case Key of
+    TK_1 .. TK_9:
+      begin
+        Index := Key - TK_1;
+        Self.Jump(Index);
+      end;
+  end;
 end;
 
 end.
