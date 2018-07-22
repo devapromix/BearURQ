@@ -3,35 +3,22 @@ unit BearURQ.Scenes;
 interface
 
 uses
-  BearURQ.Terminal,
-  BearURQ.Location,
-  BearURQ.Vars,
-  BearURQ.Buttons;
+  BearURQ.Engine;
 
 type
   TSceneEnum = (scTitle, scGame);
 
 type
-  TEntScene = record
-    Location: TLocation;
-    Buttons: TButtons;
-    Vars: TVars;
-  end;
-
-type
   TScene = class(TObject)
   private
-    FTerminal: TTerminal;
-    FButtons: TButtons;
-    FLocation: TLocation;
-    FVars: TVars;
+    FEngine: TEngine;
     procedure Print(const X, Y: Word; const S: string); overload;
     procedure Print(const Y: Word; const S: string); overload;
   public
-    constructor Create(ATerminal: TTerminal; AEntScene: TEntScene);
-    property Terminal: TTerminal read FTerminal;
+    constructor Create(AEngine: TEngine);
     procedure Render; virtual; abstract;
     procedure Update(var Key: Word); virtual; abstract;
+    property Engine: TEngine read FEngine write FEngine;
   end;
 
 type
@@ -41,7 +28,7 @@ type
     FScene: array [TSceneEnum] of TScene;
     FPrevSceneEnum: TSceneEnum;
   public
-    constructor Create(ATerminal: TTerminal;AEntScene: TEntScene);
+    constructor Create(AEngine: TEngine);
     destructor Destroy; override;
     procedure Render; override;
     procedure Update(var Key: Word); override;
@@ -57,7 +44,7 @@ type
 type
   TSceneTitle = class(TScene)
   public
-    constructor Create(ATerminal: TTerminal; AEntScene: TEntScene);
+    constructor Create(AEngine: TEngine);
     procedure Render; override;
     procedure Update(var Key: Word); override;
   end;
@@ -65,7 +52,7 @@ type
 type
   TSceneGame = class(TScene)
   public
-    constructor Create(ATerminal: TTerminal;AEntScene: TEntScene);
+    constructor Create(AEngine: TEngine);
     procedure Render; override;
     procedure Update(var Key: Word); override;
   end;
@@ -87,32 +74,29 @@ begin
   terminal_print(X, Y, S);
 end;
 
-constructor TScene.Create(ATerminal: TTerminal; AEntScene: TEntScene);
+constructor TScene.Create(AEngine: TEngine);
 begin
-  FTerminal := ATerminal;
-  FButtons := AEntScene.Buttons;
-  FLocation := AEntScene.Location;
-  FVars := AEntScene.Vars;
+  FEngine := AEngine;
 end;
 
 procedure TScene.Print(const Y: Word; const S: string);
 begin
-  terminal_print(FTerminal.Width div 2, Y, TK_ALIGN_CENTER, S);
+  terminal_print(Engine.Terminal.Width div 2, Y, TK_ALIGN_CENTER, S);
 end;
 
 { TScenes }
 
-constructor TScenes.Create(ATerminal: TTerminal; AEntScene: TEntScene);
+constructor TScenes.Create(AEngine: TEngine);
 var
   I: TSceneEnum;
 begin
-  inherited Create(ATerminal, AEntScene);
+  inherited Create(AEngine);
   for I := Low(TSceneEnum) to High(TSceneEnum) do
     case I of
       scTitle:
-        FScene[I] := TSceneTitle.Create(ATerminal, AEntScene);
+        FScene[I] := TSceneTitle.Create(AEngine);
       scGame:
-        FScene[I] := TSceneGame.Create(ATerminal, AEntScene);
+        FScene[I] := TSceneGame.Create(AEngine);
     end;
   SceneEnum := scGame;
 end;
@@ -164,9 +148,9 @@ end;
 
 { TSceneTitle }
 
-constructor TSceneTitle.Create(ATerminal: TTerminal; AEntScene: TEntScene);
+constructor TSceneTitle.Create(AEngine: TEngine);
 begin
-  inherited Create(ATerminal, AEntScene);
+  inherited Create(AEngine);
 end;
 
 procedure TSceneTitle.Render;
@@ -181,24 +165,26 @@ end;
 
 { TSceneGame }
 
-constructor TSceneGame.Create(ATerminal: TTerminal;AEntScene: TEntScene);
+constructor TSceneGame.Create(AEngine: TEngine);
 begin
-  inherited Create(ATerminal, AEntScene);
+  inherited Create(AEngine);
 end;
 
 procedure TSceneGame.Render;
 var
   I: Integer;
 begin
+  //
+  Print(0, Engine.Location.Title);
   // Показываем содержимое окна локации
-  Print(0, FLocation.Title);
-  Print(0, 2, FLocation.Content);
+  Print(0, 2, Engine.Location.Content);
   // Показываем инвентарь
+
   // Показываем все кнопки на локации
-  for I := 0 to FButtons.Count - 1 do
+  for I := 0 to Engine.Buttons.Count - 1 do
   begin
-    Print(0, Terminal.Height - (FButtons.Count - I), IntToStr(I + 1) + '. ' +
-      FButtons.GetName(I));
+    Print(0, Engine.Terminal.Height - (Engine.Buttons.Count - I), IntToStr(I + 1) + '. ' +
+      Engine.Buttons.GetName(I));
   end;
 end;
 

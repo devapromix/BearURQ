@@ -4,10 +4,7 @@ interface
 
 uses
   BearURQ.Scenes,
-  BearURQ.Buttons,
-  BearURQ.Location,
-  BearURQ.Vars,
-  BearURQ.Terminal;
+  BearURQ.Engine;
 
 type
   TPlayer = class(TObject)
@@ -15,24 +12,18 @@ type
     FKey: Word;
     FIsRender: Boolean;
     FCanClose: Boolean;
-    FTerminal: TTerminal;
+    FEngine: TEngine;
     FScenes: TScenes;
     FFileName: string;
     FVersion: string;
     FIsDebug: Boolean;
-    FButtons: TButtons;
-    FLocation: TLocation;
-    FVars: TVars;
     procedure UpdateTitle;
     procedure DoMainLoop;
   public
     constructor Create;
     destructor Destroy; override;
-    property Terminal: TTerminal read FTerminal;
+    property Engine: TEngine read FEngine;
     property Scenes: TScenes read FScenes;
-    property Buttons: TButtons read FButtons;
-    property Location: TLocation read FLocation;
-    property Vars: TVars read FVars;
     property Version: string read FVersion;
     property FileName: string read FFileName write FFileName;
     property IsDebug: Boolean read FIsDebug;
@@ -53,8 +44,6 @@ var
   { TPlayer }
 
 constructor TPlayer.Create;
-var
-  FEntScene: TEntScene;
 
   procedure ChParams;
   var
@@ -89,15 +78,8 @@ begin
   //
   FVersion := 'v.0.1';
 
-  FTerminal := TTerminal.Create;
-  FButtons := TButtons.Create;
-  FLocation := TLocation.Create;
-  FVars := TVars.Create;
-
-  FEntScene.Buttons := FButtons;
-  FEntScene.Location := FLocation;
-  FEntScene.Vars := FVars;
-  FScenes := TScenes.Create(FTerminal, FEntScene);
+  FEngine := TEngine.Create;
+  FScenes := TScenes.Create(FEngine);
 
   ChParams;
   UpdateTitle;
@@ -110,11 +92,8 @@ end;
 
 destructor TPlayer.Destroy;
 begin
-  FreeAndNil(FButtons);
-  FreeAndNil(FLocation);
-  FreeAndNil(FVars);
+  FreeAndNil(FEngine);
   FreeAndNil(FScenes);
-  FreeAndNil(FTerminal);
   inherited;
 end;
 
@@ -139,24 +118,22 @@ end;
 
 procedure TPlayer.Render;
 begin
-  Terminal.Clear;
+  Engine.Terminal.Clear;
   Scenes.Render;
-  Terminal.Refresh;
+  Engine.Terminal.Refresh;
 end;
 
 procedure TPlayer.RunQuest(const FileName: string);
 begin
   // Очищаем все переменные, весь инвентарь, все кнопки и т.д.
-  FVars.Clear;
-  FLocation.Clear;
-  FButtons.Clear;
+  Engine.Clear;
   // Добавляем системные переменные
 
   // Открываем квест
-//  FLocation.Append('Первая строка!'+#13#10+'Вторая строка!');
-//  FButtons.Append('1', 'But 1');
-//  FButtons.Append('2', 'But 2');
-//  FButtons.Append('3', 'But 3');
+  Engine.Location.Append('Первая строка!' + #13#10 + 'Вторая строка!');
+  Engine.Buttons.Append('1', 'But 1');
+  Engine.Buttons.Append('2', 'But 2');
+  Engine.Buttons.Append('3', 'But 3');
 end;
 
 procedure TPlayer.UpdateTitle;

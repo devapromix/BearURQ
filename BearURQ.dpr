@@ -14,7 +14,8 @@ uses
   BearURQ.Scenes in 'sources\BearURQ.Scenes.pas',
   BearURQ.Player in 'sources\BearURQ.Player.pas',
   BearURQ.Location in 'sources\BearURQ.Location.pas',
-  BearURQ.Vars in 'sources\BearURQ.Vars.pas';
+  BearURQ.Vars in 'sources\BearURQ.Vars.pas',
+  BearURQ.Engine in 'sources\BearURQ.Engine.pas';
 
 begin
 {$IFNDEF FPC}

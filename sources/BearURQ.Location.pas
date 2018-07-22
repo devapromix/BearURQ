@@ -28,6 +28,7 @@ end;
 
 procedure TLocation.Clear;
 begin
+  FTitle := '';
   FContent := '';
 end;
 
