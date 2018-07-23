@@ -36,6 +36,7 @@ implementation
 uses
   Math,
   SysUtils,
+  Vcl.Dialogs,
   BearLibTerminal;
 
 var
@@ -58,7 +59,6 @@ constructor TPlayer.Create;
       begin
         N := 2;
         FIsDebug := True;
-        // Box('-d');
       end;
       if ParamCount > 0 then
       begin

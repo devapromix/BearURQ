@@ -1,0 +1,8 @@
+;
+
+:loc3
+  pln Test 3
+  btn loc1, Назад
+end
+
+include inc2.qst

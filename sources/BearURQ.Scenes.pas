@@ -197,23 +197,15 @@ begin
     Engine.Vars.SetVarValue('previous_loc',
       Engine.Vars.GetVarValue('current_loc', ''));
   Engine.Vars.SetVarValue('current_loc', CurrLoc);
-  Engine.Location.Title := CurrButText;
   Self.Render;
 end;
 
 procedure TSceneGame.Render;
 var
-  I, T: Integer;
+  I: Integer;
 begin
-  T := 0;
-  // Текст последней нажатой кнопки
-  if (Engine.Location.Title <> '') then
-  begin
-    T := 2;
-    Print(0, Engine.Location.Title);
-  end;
   // Показываем содержимое окна локации
-  Print(0, T, Engine.Location.Content);
+  Print(0, 0, Engine.Location.Content);
   // Показываем инвентарь
 
   // Показываем все кнопки на локации

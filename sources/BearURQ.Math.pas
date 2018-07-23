@@ -6,6 +6,7 @@ type
   Math = class
     class function IsDelimiter(const S: string): Boolean;
     class function IsNumber(const S: string): Boolean;
+    class function IsFunction(const S: string): Boolean;
   end;
 
 implementation
@@ -23,6 +24,11 @@ begin
 end;
 
 // Строка число или нет?
+class function Math.IsFunction(const S: string): Boolean;
+begin
+  Result := False;
+end;
+
 class function Math.IsNumber(const S: string): Boolean;
 var
   I: Integer;

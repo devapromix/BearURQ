@@ -1,17 +1,25 @@
-
-
-:loc1
+﻿;
+gametitle = "serg"
+;
+       :loc1
+       a            =(2+2)*2+1
+       p 123
+       p 456
+       p 789
+       pln hhhh
   pln Test 1
-  btn loc2, 2
-  btn loc3, 3
-end
+  pln Значение переменной А: #a$
+  btn loc2, Локация 2
+  btn loc3, Локация 3
+  btn loc4, Локация 4
+        end
 
-:loc2
+       :loc2
   pln Test 2
-  btn loc1, �����
-end
+  btn loc1, Назад
+      end
 
 
-include inc.qst
+include inc1.qst
 
 
